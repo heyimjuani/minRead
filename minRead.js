@@ -1,12 +1,11 @@
-// minRead plugin by Juani Ruiz Echazu
-// check the demo on http://sandbox.juan-i.com/minRead
 (function($) {
 	$.fn.minRead = function( options ) {
 
 		var settings = $.extend({
 			where		: ".min-read",
 			archive		: false,
-			archiveText	: ".text"
+			archiveText	: ".text",
+			anchor 		: ".article-link"
 		}, options);
 
 		return this.each( function() {
@@ -20,7 +19,7 @@
 			element.parent().find(settings.where).text(timeRound + " min read");
 
 			if (settings.archive) {
-				var articleLink = element.find(".article-link");
+				var articleLink = element.find(settings.anchor);
 				var articleUrl = articleLink.attr("href");
 				console.log(articleUrl);
 				$.get(articleUrl, function(data){
