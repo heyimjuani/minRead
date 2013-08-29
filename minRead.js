@@ -1,12 +1,7 @@
 (function($) {
 	$.fn.minRead = function( options ) {
 
-		var settings = $.extend({
-			where		: ".min-read",
-			archive		: false,
-			archiveText	: ".text",
-			anchor 		: ".article-link"
-		}, options);
+		var settings = $.extend($.fn.minRead.defaults, options);
 
 		return this.each( function() {
 			var element = $(this);
@@ -35,5 +30,12 @@
 				});
 			}
 		});
-	}
-}(jQuery));
+	};
+	
+	$.fn.minRead.defaults = {
+		where		: ".min-read",
+		archive		: false,
+		archiveText	: ".text",
+		anchor 		: ".article-link"
+	};
+})(jQuery);
