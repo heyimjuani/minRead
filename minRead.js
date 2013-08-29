@@ -6,12 +6,8 @@
 		return this.each( function() {
 			var element = $(this);
 
-			var wordAmount = element.text().split(' ');
-			var timeRaw = wordAmount.length / 180;
-			var timeRound = Math.round(timeRaw);
-			if (timeRound == 0) { timeRound = 1 }
-
-			element.parent().find(settings.where).text(timeRound + " min read");
+			var time = calculateTime(element.text(), settings);
+			element.parent().find(settings.where).text(time + " min read");
 
 			if (settings.archive) {
 				var articleLink = element.find(settings.anchor);
@@ -20,20 +16,21 @@
 				$.get(articleUrl, function(data){
 					data = data.replace(/<img.+>/gi, "");
 					// console.log(data);
-					var archiveWordAmount = $(data).find(settings.archiveText).text().split(' ');
-					// console.log(archiveWordAmount);
-					var archiveTimeRaw = archiveWordAmount.length / 180;
-					console.log(archiveTimeRaw);
-					var archiveTimeRound = Math.round(archiveTimeRaw);
-					if (archiveTimeRound == 0) { archiveTimeRound = 1 }
+					var text = $(data).find(settings.archiveText).text();
+					var archiveTime = calculateTime(text, settings);
 					element.find(settings.where).text(archiveTimeRound + " min read");
 				});
 			}
 		});
 	};
 	
+	function calculateTime(text, settings) {
+		return Math.ceil(text.split(' ').length / settings.wordsPerMinute) || 1;
+	}
+	
 	$.fn.minRead.defaults = {
 		where		: ".min-read",
+		wordsPerMinute	: 180,
 		archive		: false,
 		archiveText	: ".text",
 		anchor 		: ".article-link"
